@@ -1,3 +1,4 @@
+// Home Base — Revision 3 — 2026-08-31
 import { useState, useEffect, useMemo } from "react";
 import {
   Plus, X, TrendingUp, Calendar, Clock, ChevronDown, ChevronUp, Trash2,
