@@ -676,12 +676,13 @@ export default function HomeBase() {
     return result;
   }, [entries]);
 
-  // "Still going" — the most recent Symptom and Bowel entries, so they can be
-  // re-logged with one tap (same values, fresh timestamp) instead of re-filling
-  // the whole form to say "yes, still true."
+  // "Still going" — the most recent Symptom entry, so it can be re-logged
+  // with one tap (same values, fresh timestamp) instead of re-filling the
+  // whole form to say "yes, still true." (Bowel movements don't get this —
+  // repeating a bowel entry verbatim isn't a useful action.)
   const lastByType = useMemo(() => {
     const result = {};
-    ["symptom", "bowel"].forEach((t) => {
+    ["symptom"].forEach((t) => {
       const matches = entries.filter((e) => e.type === t);
       if (matches.length === 0) return;
       result[t] = matches.reduce((latest, e) => (entryTimestamp(e) > entryTimestamp(latest) ? e : latest));
@@ -872,15 +873,10 @@ export default function HomeBase() {
 
         {tab === "log" && (
           <div className="space-y-5" style={{ fontFamily: "system-ui, sans-serif" }}>
-            {!editingId && (lastByType.symptom || lastByType.bowel) && (
+            {!editingId && lastByType.symptom && (
               <div className="space-y-1.5">
                 <div className="text-xs text-stone-600">Still going?</div>
-                {lastByType.symptom && (
-                  <QuickRepeatCard entry={lastByType.symptom} schema={schema} onRepeat={repeatEntry} />
-                )}
-                {lastByType.bowel && (
-                  <QuickRepeatCard entry={lastByType.bowel} schema={schema} onRepeat={repeatEntry} />
-                )}
+                <QuickRepeatCard entry={lastByType.symptom} schema={schema} onRepeat={repeatEntry} />
               </div>
             )}
             {!editingId && (
